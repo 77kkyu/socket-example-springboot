@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Nunito', sans-serif;
+    }
+    html, body {
+        background: linear-gradient(120deg, rgba(23, 190, 187, 1), rgba(240, 166, 202, 1));
+        overflow: hidden;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+    }
+    .container h1 {
+        margin: 0.5em auto;
+        color: #fff;
+        text-align: center;
+    }
+    .chatbox {
+        background: rgba(255, 255, 255, 0.05);
+        width: 600px;
+        height: 75%;
+        border-radius: 0.2em;
+        position: relative;
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+    }
+    .chatbox__messages:nth-of-type(odd) .chatbox__messages__user-message--ind-message {
+        float: right;
+    }
+    .chatbox__messages:nth-of-type(odd) .chatbox__messages__user-message--ind-message:after {
+        content: '';
+        position: absolute;
+        margin: -1.5em -17.06em;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid rgba(255, 255, 255, 0.2);
+    }
+    .chatbox__messages:nth-of-type(even) .chatbox__messages__user-message--ind-message {
+        float: left;
+    }
+    .chatbox__messages:nth-of-type(even) .chatbox__messages__user-message--ind-message:after {
+        content: '';
+        position: absolute;
+        margin: -1.5em 1.87em;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid rgba(255, 255, 255, 0.2);
+    }
+    .chatbox__messages__user-message {
+        width: 450px;
+    }
+    .chatbox__messages__user-message--ind-message {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1em 0;
+        height: auto;
+        width: 65%;
+        border-radius: 5px;
+        margin: 2em 1em;
+        overflow: auto;
+    }
+    .chatbox__messages__user-message--ind-message > p.name {
+        color: #fff;
+        font-size: 1em;
+    }
+    .chatbox__messages__user-message--ind-message > p.message {
+        color: #fff;
+        font-size: 0.7em;
+        margin: 0 2.8em;
+    }
+    .chatbox__user-list {
+        background: rgba(255, 255, 255, 0.1);
+        width: 25%;
+        height: 100%;
+        float: right;
+        border-top-right-radius: 0.2em;
+        border-bottom-right-radius: 0.2em;
+    }
+    .chatbox__user-list h1 {
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9em;
+        padding: 1em;
+        margin: 0;
+        font-weight: 300;
+        text-align: center;
+    }
+    .chatbox__user, .chatbox__user--active, .chatbox__user--busy, .chatbox__user--away {
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 100%;
+        margin: 1em 0.7em;
+    }
+    .chatbox__user--active {
+        background: rgba(23, 190, 187, 0.8);
+    }
+    .chatbox__user--busy {
+        background: rgba(252, 100, 113, 0.8);
+    }
+    .chatbox__user--away {
+        background: rgba(255, 253, 130, 0.8);
+    }
+    .chatbox p {
+        float: left;
+        text-align: left;
+        margin: -0.25em 2em;
+        font-size: 0.7em;
+        font-weight: 300;
+        color: #fff;
+        width: 200px;
+    }
+    .chatbox form {
+        background: #222;
+    }
+    .chatbox div input {
+        background: rgba(255, 255, 255, 0.03);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border: none;
+        width: 75%;
+        padding: 1.2em;
+        outline: none;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 300;
+    }
+    ::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+    }
+    :-moz-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+    }
+    ::-moz-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+    }
+    :-ms-input-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    #yourMsg{
+        display: none;
+    }
+</style>
+
+<body>
+
+    <div class='container' ng-cloak ng-app="chatApp">
+        <h1>Swanky Chatbox UI With Angular</h1>
+        <div class='chatbox' ng-controller="MessageCtrl as chatMessage">
+            <div class='chatbox__user-list'>
+                <h1>User list</h1>
+                <div class='chatbox__user--active'>
+                    <p>Jack Thomson</p>
+                </div>
+                <div class='chatbox__user--busy'>
+                    <p>Angelina Jolie</p>
+                </div>
+                <div class='chatbox__user--active'>
+                    <p>George Clooney</p>
+                </div>
+                <div class='chatbox__user--active'>
+                    <p>Seth Rogen</p>
+                </div>
+                <div class='chatbox__user--away'>
+                    <p>John Lydon</p>
+                </div>
+            </div>
+
+            <div id="chating">
+
+                <div class="chatbox__messages" ng-repeat="message in messages">
+                    <div class="chatbox__messages__user-message">
+                        <div class="chatbox__messages__user-message--ind-message">
+                            <p class="name">{{message.Name}}</p>
+                            <br/>
+                            <p class="message">{{message.Message}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="yourName">
+                <div>
+                    <input type="text" placeholder="사용자 명" name="userName" id="userName" onkeyup="if(window.event.keyCode==13){chatName()}">
+                </div>
+            </div>
+
+            <div id="yourMsg">
+                <div>
+                    <input type="text" placeholder="보내실 메시지를 입력하세요." id="chatting" onkeyup="if(window.event.keyCode==13){send()}">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+</html>
+<script text="javascript">
+
+
+    var ws;
+
+    function wsOpen(){
+        ws = new WebSocket("ws://" + location.host + "/chating");
+        wsEvt();
+    }
+
+    function wsEvt() {
+        ws.onopen = function(data){
+            //소켓이 열리면 초기화 세팅하기
+        }
+
+        ws.onmessage = function(data) {
+            var msg = data.data;
+            console.log("aaa = " + msg)
+            if(msg != null && msg.trim() != ''){
+                var str = "<div className='chatbox__messages' ng-repeat='message in messages'>"
+                +" <div className='chatbox__messages__user-message'>"
+                +"   <div className='chatbox__messages__user-message--ind-message'> "
+                +"      <p className='name'>ddd</p> "
+                +"       <br/> "
+                +"       <p className='message'>zz</p> "
+                +"   </div> "
+                +" </div> "
+                +" </div> ";
+                $("#chating").append(str);
+            }
+        }
+
+        document.addEventListener("keypress", function(e){
+            if(e.keyCode == 13){ //enter press
+                send();
+            }
+        });
+    }
+
+    function chatName(){
+        var userName = $("#userName").val();
+        if(userName == null || userName.trim() == ""){
+            alert("사용자 이름을 입력해주세요.");
+            $("#userName").focus();
+        }else{
+            wsOpen();
+            $("#yourName").hide();
+            $("#yourMsg").show();
+        }
+    }
+
+    function send() {
+        var uN = $("#userName").val();
+        var msg = $("#chatting").val();
+        ws.send(uN+":"+msg);
+        $('#chatting').val("");
+    }
+
+    /*(function() {
+        var app = angular.module('chatApp', []);
+
+        app.controller('MessageCtrl', function($scope) {
+            $scope.messages = [{
+                Name: 'George Clooney',
+                Message: "The only failure is not to try"
+            }, {
+                Name: 'Seth Rogen',
+                Message: "I grew up in Vancouver, man. That's where more than half of my style comes from."
+            }, {
+                Name: 'John Lydon',
+                Message: "There's nothing glorious in dying. Anyone can do it."
+            }];
+        });
+
+    })();*/
+
+</script>
