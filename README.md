@@ -27,3 +27,6 @@
     Connection: Upgrade
     Sec-WebSocket-Accept: 1qwduiEio2NSDuoiqdpwqeWOE==
     Sec-WebSocket-Protocol: v10.stomp
+
+---
+![image](Assets/img01.png)
