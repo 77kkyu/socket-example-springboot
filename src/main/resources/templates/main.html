@@ -161,7 +161,7 @@
 <body>
 
     <div class='container' ng-cloak ng-app="chatApp">
-        <h1>Swanky Chatbox UI With Angular</h1>
+        <h1> Chatbox UI </h1>
         <div class='chatbox' ng-controller="MessageCtrl as chatMessage">
             <div class='chatbox__user-list'>
                 <h1>User list</h1>
@@ -182,17 +182,17 @@
                 </div>
             </div>
 
-            <div id="chating">
+            <div id="chating" style="overflow: auto; height: 680px; scrollbar-width: none;">
 
-                <div class="chatbox__messages" ng-repeat="message in messages">
+                <!--<div class="chatbox__messages" ng-repeat="message in messages">
                     <div class="chatbox__messages__user-message">
-                        <div class="chatbox__messages__user-message--ind-message">
+                        <div class="chatbox__messages__user-message&#45;&#45;ind-message">
                             <p class="name">{{message.Name}}</p>
                             <br/>
                             <p class="message">{{message.Message}}</p>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
             </div>
 
@@ -204,7 +204,7 @@
 
             <div id="yourMsg">
                 <div>
-                    <input type="text" placeholder="보내실 메시지를 입력하세요." id="chatting" onkeyup="if(window.event.keyCode==13){send()}">
+                    <input type="text" placeholder="보내실 메시지를 입력하세요." id="chatting" onkeyup="if(window.event.keyCode==13){send(); return false;}">
                 </div>
             </div>
 
@@ -230,15 +230,20 @@
         }
 
         ws.onmessage = function(data) {
-            var msg = data.data;
-            console.log("aaa = " + msg)
-            if(msg != null && msg.trim() != ''){
-                var str = "<div className='chatbox__messages' ng-repeat='message in messages'>"
-                +" <div className='chatbox__messages__user-message'>"
-                +"   <div className='chatbox__messages__user-message--ind-message'> "
-                +"      <p className='name'>ddd</p> "
+
+            if(data.data != null && data.data.trim() != ''){
+                var msg = data.data.split(':');
+                console.log("msg = " + msg);
+                var id = msg[0];
+                var content = msg[1];
+                console.log("id = " + id);
+                console.log("content = " + content);
+                var str = "<div class='chatbox__messages' ng-repeat='message in messages'>"
+                +" <div class='chatbox__messages__user-message'>"
+                +"   <div class='chatbox__messages__user-message--ind-message'> "
+                +"      <p class='name'>"+id+"</p> "
                 +"       <br/> "
-                +"       <p className='message'>zz</p> "
+                +"       <p class='message'>"+content+"</p> "
                 +"   </div> "
                 +" </div> "
                 +" </div> ";
@@ -246,11 +251,11 @@
             }
         }
 
-        document.addEventListener("keypress", function(e){
+        /*document.addEventListener("keypress", function(e){
             if(e.keyCode == 13){ //enter press
                 send();
             }
-        });
+        });*/
     }
 
     function chatName(){
